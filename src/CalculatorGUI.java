@@ -25,7 +25,7 @@ public class CalculatorGUI extends JFrame
     private JPanel textPanel;
     private JPanel buttonPanel;
 
-    public CalculatorGUI(String title) {
+    private CalculatorGUI(String title) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,7 +34,7 @@ public class CalculatorGUI extends JFrame
     }
 
     public static void main(String[] args) {
-        JFrame frame = new CalculatorGUI("Simple Java Calculator");
+        JFrame frame = new CalculatorGUI("Java Calculator");
         frame.setVisible(true);
     }
 
