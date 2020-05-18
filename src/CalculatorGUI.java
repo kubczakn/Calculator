@@ -199,6 +199,47 @@ public class CalculatorGUI extends JFrame
             @Override public void actionPerformed(ActionEvent e)
             {
                 // performs calculation
+                double result = 0;
+                double converted_left = 0;
+                double converted_right = 0;
+                char current_operator = ' ';
+                StringBuilder right = new StringBuilder();
+                StringBuilder left = new StringBuilder();
+                for (int i = 0; i < labelText[0].length(); ++i) {
+                    char c = labelText[0].charAt(i);
+                    if (c == '+') {
+                        if (converted_left == 0) {
+                            converted_left = Double.parseDouble(String.valueOf(left));
+                        }
+                        current_operator = '+';
+                    }
+                    else if (c != ' ') {
+                        if (converted_left == 0) {
+                            left.append(c);
+                        }
+                        else {
+                            right.append(c);
+                        }
+
+                    }
+                    else if (right.length() != 0) {
+                        converted_right = Double.parseDouble(String.valueOf(right));
+                        if (current_operator == '+') {
+                            result = converted_left + converted_right;
+                            converted_left = result;
+                            converted_right = 0;
+                            right =  new StringBuilder();
+                        }
+
+                    }
+                }
+                converted_right = Double.parseDouble(String.valueOf(right));
+                if (current_operator == '+') {
+                    result = converted_left + converted_right;
+                }
+                labelText[0] = " ";
+                labelText[0] = String.valueOf(result);
+                textLabel.setText(labelText[0]);
             }
         });
         backButton.addActionListener(new ActionListener()
