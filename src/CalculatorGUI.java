@@ -190,7 +190,7 @@ public class CalculatorGUI extends JFrame
             @Override public void actionPerformed(ActionEvent e)
             {
                 // inserts a negative in the text label
-                labelText[0] = labelText[0].concat("-");
+                labelText[0] = labelText[0].concat("(-)");
                 textLabel.setText(labelText[0]);
             }
         });
@@ -199,6 +199,7 @@ public class CalculatorGUI extends JFrame
             @Override public void actionPerformed(ActionEvent e)
             {
                 // performs calculation
+                double negative = 1;
                 double result = 0;
                 double converted_left = 0;
                 double converted_right = 0;
@@ -213,6 +214,33 @@ public class CalculatorGUI extends JFrame
                         }
                         current_operator = '+';
                     }
+                    else if (c == '/') {
+                        if (converted_left == 0) {
+                            converted_left = Double.parseDouble(String.valueOf(left));
+                        }
+                        current_operator = '/';
+                    }
+                    else if (c == '-') {
+                        if (converted_left == 0) {
+                            converted_left = Double.parseDouble(String.valueOf(left));
+                        }
+                        current_operator = '-';
+                    }
+                    else if (c == '*') {
+                        if (converted_left == 0) {
+                            converted_left = Double.parseDouble(String.valueOf(left));
+                        }
+                        current_operator = '*';
+                    }
+                    else if (c == '(') {
+                        i += 2;
+                        if (negative == 1) {
+                            negative = -1;
+                        }
+                        else {
+                            negative = 1;
+                        }
+                    }
                     else if (c != ' ') {
                         if (converted_left == 0) {
                             left.append(c);
@@ -222,6 +250,7 @@ public class CalculatorGUI extends JFrame
                         }
 
                     }
+
                     else if (right.length() != 0) {
                         converted_right = Double.parseDouble(String.valueOf(right));
                         if (current_operator == '+') {
@@ -230,12 +259,45 @@ public class CalculatorGUI extends JFrame
                             converted_right = 0;
                             right =  new StringBuilder();
                         }
+                        else if (current_operator == '/') {
+                            result = converted_left / converted_right;
+                            converted_left = result;
+                            converted_right = 0;
+                            right =  new StringBuilder();
+                        }
+                        else if (current_operator == '-') {
+                            result = converted_left - converted_right;
+                            converted_left = result;
+                            converted_right = 0;
+                            right =  new StringBuilder();
+                        }
+                        else if (current_operator == '*') {
+                            result = converted_left * converted_right;
+                            converted_left = result;
+                            converted_right = 0;
+                            right =  new StringBuilder();
+                        }
 
                     }
                 }
-                converted_right = Double.parseDouble(String.valueOf(right));
+                if (right.length() != 0) {
+                    converted_right = Double.parseDouble(String.valueOf(right));
+                }
                 if (current_operator == '+') {
                     result = converted_left + converted_right;
+                }
+                else if (current_operator == '/') {
+                    result = converted_left / converted_right;
+                }
+                else if (current_operator == '-') {
+                    result = converted_left - converted_right;
+                }
+                else if (current_operator == '*') {
+                    result = converted_left * converted_right;
+                }
+                else {
+                    result = Double.parseDouble(String.valueOf(left));
+                    result *= negative;
                 }
                 labelText[0] = " ";
                 labelText[0] = String.valueOf(result);
