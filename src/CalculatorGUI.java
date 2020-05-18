@@ -205,7 +205,17 @@ public class CalculatorGUI extends JFrame
         {
             @Override public void actionPerformed(ActionEvent e)
             {
-                // goes back a space in the text label
+                // removes last character in text label
+                String end_of_text = labelText[0].substring(labelText[0].length() - 1);
+                if (end_of_text.equals(" ")) {
+                    for (int i = 0; i < 3; ++i) {
+                        labelText[0] = labelText[0].substring(0 , labelText[0].length() - 1);
+                    }
+                }
+                else {
+                    labelText[0] = labelText[0].substring(0, labelText[0].length() - 1);
+                }
+                textLabel.setText(labelText[0]);
             }
         });
     }
