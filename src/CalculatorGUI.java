@@ -199,13 +199,15 @@ public class CalculatorGUI extends JFrame
             @Override public void actionPerformed(ActionEvent e)
             {
                 // performs calculation
-                double negative = 1;
+                double left_negative = 1;
+                double right_negative = 1;
                 double result = 0;
                 double converted_left = 0;
                 double converted_right = 0;
                 char current_operator = ' ';
                 StringBuilder right = new StringBuilder();
                 StringBuilder left = new StringBuilder();
+
                 for (int i = 0; i < labelText[0].length(); ++i) {
                     char c = labelText[0].charAt(i);
                     if (c == '+') {
@@ -214,13 +216,14 @@ public class CalculatorGUI extends JFrame
                         }
                         current_operator = '+';
                     }
+
                     else if (c == '/') {
                         if (converted_left == 0) {
                             converted_left = Double.parseDouble(String.valueOf(left));
                         }
                         current_operator = '/';
                     }
-                    else if (c == '-') {
+                    else if (c == '-' && labelText[0].charAt(0) != '-') {
                         if (converted_left == 0) {
                             converted_left = Double.parseDouble(String.valueOf(left));
                         }
@@ -234,12 +237,23 @@ public class CalculatorGUI extends JFrame
                     }
                     else if (c == '(') {
                         i += 2;
-                        if (negative == 1) {
-                            negative = -1;
+                        if (converted_left == 0) {
+                            if (left_negative == 1) {
+                                left_negative = -1;
+                            }
+                            else {
+                                left_negative = 1;
+                            }
                         }
                         else {
-                            negative = 1;
+                            if (right_negative == 1) {
+                                right_negative = -1;
+                            }
+                            else {
+                                right_negative = 1;
+                            }
                         }
+
                     }
                     else if (c != ' ') {
                         if (converted_left == 0) {
@@ -254,24 +268,32 @@ public class CalculatorGUI extends JFrame
                     else if (right.length() != 0) {
                         converted_right = Double.parseDouble(String.valueOf(right));
                         if (current_operator == '+') {
+                            converted_left *= left_negative;
+                            converted_right *= right_negative;
                             result = converted_left + converted_right;
                             converted_left = result;
                             converted_right = 0;
                             right =  new StringBuilder();
                         }
                         else if (current_operator == '/') {
+                            converted_left *= left_negative;
+                            converted_right *= right_negative;
                             result = converted_left / converted_right;
                             converted_left = result;
                             converted_right = 0;
                             right =  new StringBuilder();
                         }
                         else if (current_operator == '-') {
+                            converted_left *= left_negative;
+                            converted_right *= right_negative;
                             result = converted_left - converted_right;
                             converted_left = result;
                             converted_right = 0;
                             right =  new StringBuilder();
                         }
                         else if (current_operator == '*') {
+                            converted_left *= left_negative;
+                            converted_right *= right_negative;
                             result = converted_left * converted_right;
                             converted_left = result;
                             converted_right = 0;
@@ -284,20 +306,28 @@ public class CalculatorGUI extends JFrame
                     converted_right = Double.parseDouble(String.valueOf(right));
                 }
                 if (current_operator == '+') {
+                    converted_left *= left_negative;
+                    converted_right *= right_negative;
                     result = converted_left + converted_right;
                 }
                 else if (current_operator == '/') {
+                    converted_left *= left_negative;
+                    converted_right *= right_negative;
                     result = converted_left / converted_right;
                 }
                 else if (current_operator == '-') {
+                    converted_left *= left_negative;
+                    converted_right *= right_negative;
                     result = converted_left - converted_right;
                 }
                 else if (current_operator == '*') {
+                    converted_left *= left_negative;
+                    converted_right *= right_negative;
                     result = converted_left * converted_right;
                 }
                 else {
                     result = Double.parseDouble(String.valueOf(left));
-                    result *= negative;
+                    result *= left_negative;
                 }
                 labelText[0] = " ";
                 labelText[0] = String.valueOf(result);
@@ -325,7 +355,8 @@ public class CalculatorGUI extends JFrame
 
     public static void main(String[] args) {
         JFrame frame = new CalculatorGUI("Java Calculator");
-
+        frame.setSize(new Dimension(290, 290));
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 
